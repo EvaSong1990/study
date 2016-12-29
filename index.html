@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            perspective: 2000px;
+            transform-style: preserve-3d;
+        }
+        ul{
+            width: 800px;
+            height: 500px;
+            margin: 0 auto;
+            list-style: none;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg);
+        }
+        li{
+            width: 200px;
+            height: 80px;
+            border: 1px solid #000;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            background: url(images/0.png);
+            background-size: 100% 100%;
+        }
+        .box{
+            width: 800px;
+            height: 500px;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script src="jquery-1.12.4.js"></script>
+    <script>
+        var imgW=$("li")[0].offsetWidth;
+        //遍历背景图片、和每一个li旋转的角度
+        $("li").each(function(i,el){
+            //console.log(i);
+            $(el).css(
+                    {
+                        "background":"url(images/"+i+".png) no-repeat",
+                        "backgroundSize":"100% 100%",
+                        "transform":"translate(-50%,-50%) rotateY("+i*36+"deg) translateZ(310px)"
+                    }
+            );
+        });
+        //给ul注册鼠标按下事件
+        var startX,startY;
+        var oddX= 0,oddY=0;
+        var x= 0,y=0;
+        $(".box").on("mousedown",function(event){
+            event.preventDefault();
+           //window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+
+            //获取鼠标初始位置的坐标
+            startX=event.pageX;
+            startY=event.pageY;
+            //给document注册鼠标移动事件
+            oddX=x;
+            oddY=y;
+            $(document).on("mousemove",function(event){
+                //获取鼠标移动后的位置
+                moveX=event.pageX;
+                moveY=event.pageY;
+                x=moveX-startX+oddX;
+                y=moveY-startY+oddY;
+                $("ul").css("transform","rotateX(-20deg) rotateY("+(x)/3+"deg) rotateX("+-(y)/10+"deg)");
+            });
+        });
+        $(document).on("mouseup",function(){
+            $(document).off("mousemove");
+        });
+
+    </script>
+</body>
+</html>
